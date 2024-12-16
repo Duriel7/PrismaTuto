@@ -1,0 +1,8 @@
+node_modules/
+.env*
+!.env.example
+.vscode/
+*.csv
+result*.json
+src/utils.ts
+src/main-file-ivan.ts
