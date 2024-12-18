@@ -6,3 +6,4 @@ node_modules/
 result*.json
 src/utils.ts
 src/main-file-ivan.ts
+database/
