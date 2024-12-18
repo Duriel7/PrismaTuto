@@ -7,45 +7,28 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model origins {
-  id_origin Decimal @id(map: "pk_origin") @db.Decimal(4, 0)
-  continent String  @db.VarChar(25)
-  land      String  @db.VarChar(25)
-  city      String  @db.VarChar(25)
+model Post {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  title     String   @db.VarChar(255)
+  content   String?
+  published Boolean  @default(false)
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  Int
 }
 
-model t_characters {
-  id          Decimal @id(map: "pk_id") @db.Decimal(4, 0)
-  name        String  @db.VarChar(50)
-  class       String  @db.VarChar(25)
-  job         String  @db.VarChar(50)
-  origin      String  @db.VarChar(25)
-  description String?
+model Profile {
+  id     Int     @id @default(autoincrement())
+  bio    String?
+  user   User    @relation(fields: [userId], references: [id])
+  userId Int     @unique
 }
 
-model t_classes {
-  id_class                                                Decimal         @id(map: "pk_idclass") @db.Decimal(4, 0)
-  name                                                    String          @db.VarChar(25)
-  specialization                                          String          @db.VarChar(25)
-  overclass_first                                         Decimal?        @db.Decimal(4, 0)
-  overclass_second                                        Decimal?        @db.Decimal(4, 0)
-  t_overclasses_t_classes_overclass_firstTot_overclasses  t_overclasses?  @relation("t_classes_overclass_firstTot_overclasses", fields: [overclass_first], references: [id_overclass], onDelete: Restrict, onUpdate: Restrict, map: "fk_overclassfirst")
-  t_overclasses_t_classes_overclass_secondTot_overclasses t_overclasses?  @relation("t_classes_overclass_secondTot_overclasses", fields: [overclass_second], references: [id_overclass], onDelete: Restrict, onUpdate: Restrict, map: "fk_overclasssecond")
-  t_overclasses_t_overclasses_underclassTot_classes       t_overclasses[] @relation("t_overclasses_underclassTot_classes")
-}
-
-model t_jobs {
-  id_job         Decimal @id(map: "pk_idjob") @db.Decimal(4, 0)
-  name           String  @db.VarChar(25)
-  specialization String  @db.VarChar(25)
-}
-
-model t_overclasses {
-  id_overclass                                        Decimal     @id(map: "pk_idoverclass") @db.Decimal(4, 0)
-  name                                                String      @db.VarChar(25)
-  specialization                                      String      @db.VarChar(25)
-  underclass                                          Decimal     @db.Decimal(4, 0)
-  t_classes_t_classes_overclass_firstTot_overclasses  t_classes[] @relation("t_classes_overclass_firstTot_overclasses")
-  t_classes_t_classes_overclass_secondTot_overclasses t_classes[] @relation("t_classes_overclass_secondTot_overclasses")
-  t_classes_t_overclasses_underclassTot_classes       t_classes   @relation("t_overclasses_underclassTot_classes", fields: [underclass], references: [id_class], onUpdate: Restrict, map: "fk_class")
+model User {
+  id      Int      @id @default(autoincrement())
+  email   String   @unique
+  name    String?
+  posts   Post[]
+  profile Profile?
 }
