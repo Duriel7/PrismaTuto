@@ -1,5 +1,6 @@
 create table t_characters (
 	id numeric(4) not null,
+	name varchar(50) not null,
 	class varchar(25) not null,
 	job varchar(50) not null,
 	origin varchar(25) not null,
