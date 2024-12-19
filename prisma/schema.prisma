@@ -16,6 +16,7 @@ model Post {
   published Boolean  @default(false)
   author    User     @relation(fields: [authorId], references: [id])
   authorId  Int
+  tags      Tag[]
 }
 
 model Profile {
@@ -31,4 +32,10 @@ model User {
   name    String?
   posts   Post[]
   profile Profile?
+}
+
+model Tag {
+  id    Int    @id @default(autoincrement())
+  name  String
+  posts Post[]
 }
